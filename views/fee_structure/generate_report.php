@@ -21,10 +21,10 @@ $ui->select()
 // ->addonLeft($ui->icon("bars"))
 ->required()
 ->options(array(
-	$ui->option()->value()->text('Select')->disabled()->selected($session_year==''),
-	$ui->option()->value('2019-2020')->text('2019-2020')->selected($session_year=='2019-2020'),
-	$ui->option()->value('2020-2021')->text('2020-2021')->selected($session_year=='2020-2021'),
-	$ui->option()->value('2021-2022')->text('2021-2022')->selected($session_year=='2021-2022')))
+	$ui->option()->value()->text('Select')->disabled()->selected(),
+	$ui->option()->value('2019-2020')->text('2019-2020')->selected(),
+	$ui->option()->value('2020-2021')->text('2020-2021')->selected(),
+	$ui->option()->value('2021-2022')->text('2021-2022')->selected()))
     
 ->required()
 ->show();
@@ -37,9 +37,10 @@ $ui->select()
 ->width(3)
 ->required()
 ->options(array(
-	$ui->option()->value()->text('Select')->disabled()->selected($session==""),
-	$ui->option()->value('monsoon')->text('Monsoon')->selected($session=="monsoon"),
-	$ui->option()->value('winter')->text('Winter')->selected($session=="winter")))
+	$ui->option()->value()->text('Select')->disabled()->selected(),
+	$ui->option()->value('monsoon')->text('Monsoon')->selected(),
+	$ui->option()->value('winter')->text('Winter')->selected(),
+	$ui->option()->value('summer')->text('Summer')->selected()))
 ->required()
 ->show();
  
@@ -93,7 +94,12 @@ $columns = array("Tution Fees"=>"tution_fees",
 					"Computer and Internet Charges"=>"computer_and_internet_charges",
 					"Electricity Charges"=>"electricity_charges",
 					"Library Fee"=>"library_fee",
-					"Training and Placement Support Fee"=>"training_and_placement_support_fee");
+					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
+					"Miscellaneous Fee" => "miscellaneous_fee",
+					"Late Fine" => "late_fine",
+					"Pending Amount" => "pending_amount",
+					"Refundable Amount" => "refundable_amount",
+					"Total Fee" => "total_fee");
 
 					$extra_columns = array(
 							
@@ -106,7 +112,8 @@ $columns = array("Tution Fees"=>"tution_fees",
 							"Branch"=>"branch",
 							"Semester"=>"semester",
 							"Category"=>"category",
-							"PWD Status"=>"pwd_status");
+							"PWD Status"=>"pwd_status",
+							"Date of Registration"=>"date_of_registration");
 							
 	$columns = array_merge($extra_columns, $columns);
 
