@@ -1,5 +1,5 @@
 <?php 
-//session_start();
+session_start();
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //require 'db_connection.php';
 
@@ -20,6 +20,7 @@ class Generate_report extends MY_Controller
 							"Semester"=>"semester",
 							"Category"=>"category",
 							"PWD Status"=>"pwd_status",
+							"Date of Registration"=>"date_of_registration",
 			"Tution Fees"=>"tution_fees", 
 					"Annual Charges"=>"annual_charge",
 					"Medical Fund"=>"medical_fund",
@@ -31,6 +32,11 @@ class Generate_report extends MY_Controller
 					"Electricity Charges"=>"electricity_charges",
 					"Library Fee"=>"library_fee",
 					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
+					"Miscellaneous Fee" => "miscellaneous_fee",
+					"Late Fine" => "late_fine",
+					"Pending Amount" => "pending_amount",
+					"Refundable Amount" => "refundable_amount",
+					"Total Fee" => "total_fee"
 						   );
 		$this->load->model("fee_structure/report_model","report_model");
 	   	
@@ -39,24 +45,6 @@ class Generate_report extends MY_Controller
 	function index()
 	{
 		$this->drawHeader('Generate Report');
-         	/*$query ="
-		SELECT a.*,b.* FROM stu_details_project AS a 
-		JOIN
-		stu_fee_structure AS b
-		ON a.session_year = b.session_year AND a.session = b.session AND a.category = b.category 
-		AND b.is_deleted='NO';";
-		$rows=array();
-		if ($is_query_run = mysql_query($query))
-		{
-         while ($query_executed = mysql_fetch_assoc ($is_query_run))
-  		  	{ 
-             $rows[]=$query_executed;
-    		}
-
-		}  
-		
-	    $data['rows']=$rows;
-	    */
 	    $data['rows']=$this->report_model->getAllRows();
 		$this->load->view('fee_structure/generate_report',$data);
 		$this->drawFooter();
@@ -69,24 +57,6 @@ class Generate_report extends MY_Controller
           
 		$session_year =  $this->input->post('session_year');
 		$session =  $this->input->post('session');
-		
-         /*		$query ="
-		SELECT a.*,b.* FROM stu_details_project AS a 
-		JOIN
-		stu_fee_structure AS b
-		ON a.session_year = b.session_year AND a.session = b.session AND a.category = b.category 
-		AND a.session_year='".$session_year."' AND a.session='".$session."' AND b.is_deleted='NO';";
-		$rows=array();
-		if ($is_query_run = mysql_query($query))
-		{
-         while ($query_executed = mysql_fetch_assoc ($is_query_run))
-  		  	{ 
-             $rows[]=$query_executed;
-    		}
-
-		}   
-		$data['rows']=$rows;
-		*/
 		$data['rows']=$this->report_model->getRequiredRows($session_year, $session);
 		$this->load->view('fee_structure/generate_report',$data);
 		$this->drawFooter();
@@ -97,8 +67,7 @@ class Generate_report extends MY_Controller
 		$rows=array();
 		$rows=$_SESSION["exported_rows"];
 		
-     if($rows)
-	 {
+     
 
 	header('Content-Type: text/csv; charset=utf-8');
 	header('Content-Disposition: attachment;
@@ -123,8 +92,8 @@ class Generate_report extends MY_Controller
 
 
 	fclose($output);
-	 }
-		
+	 
+	
 	}
 	
 
