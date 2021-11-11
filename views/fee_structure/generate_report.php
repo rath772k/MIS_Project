@@ -96,10 +96,8 @@ $columns = array("Tution Fees"=>"tution_fees",
 					"Library Fee"=>"library_fee",
 					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
 					"Miscellaneous Fee" => "miscellaneous_fee",
-					"Late Fine" => "late_fine",
-					"Pending Amount" => "pending_amount",
-					"Refundable Amount" => "refundable_amount",
-					"Total Fee" => "total_fee");
+					 
+					);
 
 					$extra_columns = array(
 							
@@ -113,7 +111,8 @@ $columns = array("Tution Fees"=>"tution_fees",
 							"Semester"=>"semester",
 							"Category"=>"category",
 							"PWD Status"=>"pwd_status",
-							"Date of Registration"=>"date_of_registration");
+							"Total Fee" => "total_fee"
+							);
 							
 	$columns = array_merge($extra_columns, $columns);
 
