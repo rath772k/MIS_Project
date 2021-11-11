@@ -3,6 +3,7 @@
 class Add_fee_structure extends MY_Controller
 {
 	public $column;
+	public $numeric;
 	function __construct()
 	{
 		parent::__construct(array('emp','stu'));
@@ -12,7 +13,13 @@ class Add_fee_structure extends MY_Controller
 				"sports_subscription_fee","house_rent",
 				"semester_registration_fee","examination_fee",
 				"computer_and_internet_charges","electricity_charges",
-				"library_fee","training_and_placement_support_fee");
+				"library_fee","training_and_placement_support_fee","miscellaneous_fee");
+		$this->numeric = array(
+				"tution_fees","annual_charge","medical_fund",
+				"sports_subscription_fee","house_rent",
+				"semester_registration_fee","examination_fee",
+				"computer_and_internet_charges","electricity_charges",
+				"library_fee","training_and_placement_support_fee","miscellaneous_fee");
 		$this->load->model('fee_structure/fee_structure_model','fee_model');
 	}
 
@@ -21,7 +28,16 @@ class Add_fee_structure extends MY_Controller
 		$this->drawHeader('Add Fee Structure');
 		
 		$this->load->view('fee_structure/add_fee_structure');
-		$data["rows"] = $this->fee_model->getAllRows();
+		$rows = $this->fee_model->getAllRows();
+		foreach($rows as $key => $value)
+		{
+			$rows[$key]['total_fee'] = 0;
+			foreach($this->numeric as $column)
+			{
+				$rows[$key]['total_fee'] += $rows[$key][$column];
+			}
+		}
+		$data['rows'] = $rows;
 		$this->load->view('fee_structure/fee_table',$data);
 		$this->drawFooter();
 	}
@@ -62,7 +78,16 @@ class Add_fee_structure extends MY_Controller
 		$this->drawHeader('Edit Fee Structure');
 		$this->load->view('fee_structure/edit_fee_structure', $data);
 		$data = array();
-		$data['rows'] = $this->fee_model->getAllRows();;
+		$rows = $this->fee_model->getAllRows();
+		foreach($rows as $key => $value)
+		{
+			$rows[$key]['total_fee'] = 0;
+			foreach($this->numeric as $column)
+			{
+				$rows[$key]['total_fee'] += $rows[$key][$column];
+			}
+		}
+		$data['rows'] = $rows;
 		$this->load->view('fee_structure/fee_table', $data);
 		$this->drawFooter();
 		
