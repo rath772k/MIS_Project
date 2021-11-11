@@ -30,7 +30,9 @@
 					"Computer and Internet Charges"=>"computer_and_internet_charges",
 					"Electricity Charges"=>"electricity_charges",
 					"Library Fee"=>"library_fee",
-					"Training and Placement Support Fee"=>"training_and_placement_support_fee");
+					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
+					"Miscellaneous Fee"=>"miscellaneous_fee",
+					"Total Fee"=>"total_fee");
 	
 	$extra_columns = array("Session Year"=>"session_year",
 							"Session"=>"session",
