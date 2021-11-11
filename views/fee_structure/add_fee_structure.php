@@ -119,7 +119,8 @@
 					"Computer and Internet Charges"=>"computer_and_internet_charges",
 					"Electricity Charges"=>"electricity_charges",
 					"Library Fee"=>"library_fee",
-					"Training and Placement Support Fee"=>"training_and_placement_support_fee");
+					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
+					"Miscellaneous Fee"=>"miscellaneous_fee");
 
 		$categories = array("General/Open", "OBC/OBC(NCL)", "EWS", "PWD", "SC", "ST");
 
