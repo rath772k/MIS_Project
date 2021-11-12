@@ -40,6 +40,18 @@ class Report_model extends CI_Model
 
     function getRequiredRows($session_year, $session){
         
+        $rows = $this->db->get_where('stu_details_full', 
+            array('session' => $session, 'session_year' => $session_year));
+        $rows = $rows->result_array();
+        foreach ($rows as $key => $value) {
+            if (empty($value)) {
+                unset($rows[$key]);
+            }
+        }
+        if(!empty($rows)) return $rows;
+        //echo "hi";
+        //exit();
+
         $sum_part = "";
         foreach($this->numeric as $column)
         {
@@ -51,18 +63,37 @@ class Report_model extends CI_Model
                     AS total_fee";
 
         $query ="
-                SELECT a.*,"
+                SELECT *,"
                 .$sum_part
-                .",b.* FROM stu_details_project AS a 
+                ." FROM 
+                stu_fee_structure AS b 
                 JOIN
-                stu_fee_structure AS b
+                stu_details_project AS a
                 ON a.session_year = b.session_year AND a.session = b.session AND
-                (a.category = b.category OR (b.category = 'PWD' AND a.pwd_status = 'YES')) 
+                ((b.category = 'PWD' AND a.pwd_status = 'YES') 
+                OR (a.category = b.category AND a.pwd_status = 'NO')) 
                 AND a.session_year='".$session_year
                 ."' AND a.session='".$session."' AND b.is_deleted='NO';";
-
+        //echo $query;
+        //exit();
         $rows = $this->db->query($query);
-        return $rows->result_array();
+        $rows = $rows->result_array();
+        
+        foreach($rows as $row){
+            $this->db->replace('stu_details_full',$row);   
+        }
+        return $rows;
+    }
+
+    /*$rows - an array of $row where $row contains all the
+     *          columns of 'stu_details_full'
+     *          table (same as the ones displayed in frontend) as keys.
+     *          
+     */
+    function saveAllRows($rows){
+        foreach($rows as $row){
+            $this->db->replace('stu_details_full',$row);   
+        }
     }
 }
 
