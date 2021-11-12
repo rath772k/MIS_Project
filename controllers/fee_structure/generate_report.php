@@ -1,5 +1,5 @@
 <?php 
-session_start();
+ session_start();
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //require 'db_connection.php';
 
@@ -39,6 +39,7 @@ class Generate_report extends MY_Controller
 					"Total Fee" => "total_fee"
 						   );
 		$this->load->model("fee_structure/report_model","report_model");
+	
 	   	
 	}
 
@@ -57,6 +58,9 @@ class Generate_report extends MY_Controller
           
 		$session_year =  $this->input->post('session_year');
 		$session =  $this->input->post('session');
+		
+		$data['session']=$session;
+		$data['session_year']=$session_year;
 		$data['rows']=$this->report_model->getRequiredRows($session_year, $session);
 		$this->load->view('fee_structure/generate_report',$data);
 		$this->drawFooter();
@@ -65,13 +69,15 @@ class Generate_report extends MY_Controller
 	function excel()
 	{ 
 		$rows=array();
+		$session_year =  $_SESSION["session"];
+		$session =  $_SESSION["session_year"];
 		$rows=$_SESSION["exported_rows"];
 		
-     
+       
 
 	header('Content-Type: text/csv; charset=utf-8');
 	header('Content-Disposition: attachment;
-		filename=stu_details.csv');
+		filename=stu_details_'.$session_year.'_'.$session.'.csv');
 
      $header=array();
 	foreach($this->columns as $key=>$value)
@@ -85,13 +91,14 @@ class Generate_report extends MY_Controller
 		foreach($this->columns as $key=>$value)
 		{
 			$curr_row[$value]=$row[$value];
+			echo $row[$value];
 		}
 		
-		fputcsv($output, $curr_row);
+		 fputcsv($output, $curr_row);
 	}
 
 
-	fclose($output);
+	 fclose($output);
 	 
 	
 	}
