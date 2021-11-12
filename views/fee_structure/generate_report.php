@@ -1,8 +1,11 @@
 
 
 <?php
-session_start();
+// session_start();
+$_SESSION["session"] = $session;
+$_SESSION["session_year"] = $session_year;
 $_SESSION["exported_rows"] = $rows;
+
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 header("Pragma: no-cache"); // HTTP 1.0.
 header("Expires: 0");
@@ -21,10 +24,10 @@ $ui->select()
 // ->addonLeft($ui->icon("bars"))
 ->required()
 ->options(array(
-	$ui->option()->value()->text('Select')->disabled()->selected(),
-	$ui->option()->value('2019-2020')->text('2019-2020')->selected(),
-	$ui->option()->value('2020-2021')->text('2020-2021')->selected(),
-	$ui->option()->value('2021-2022')->text('2021-2022')->selected()))
+	$ui->option()->value()->text('Select')->disabled()->selected($session_year==""),
+	$ui->option()->value('2019-2020')->text('2019-2020')->selected($session_year=="2019-2020"),
+	$ui->option()->value('2020-2021')->text('2020-2021')->selected($session_year=="2020-2021"),
+	$ui->option()->value('2021-2022')->text('2021-2022')->selected($session_year=="2021-2022")))
     
 ->required()
 ->show();
@@ -37,10 +40,10 @@ $ui->select()
 ->width(3)
 ->required()
 ->options(array(
-	$ui->option()->value()->text('Select')->disabled()->selected(),
-	$ui->option()->value('monsoon')->text('Monsoon')->selected(),
-	$ui->option()->value('winter')->text('Winter')->selected(),
-	$ui->option()->value('summer')->text('Summer')->selected()))
+	$ui->option()->value()->text('Select')->disabled()->selected($session==""),
+	$ui->option()->value('monsoon')->text('Monsoon')->selected($session=="monsoon"),
+	$ui->option()->value('winter')->text('Winter')->selected($session=="winter"),
+	$ui->option()->value('summer')->text('Summer')->selected($session=="summer")))
 ->required()
 ->show();
  
@@ -67,23 +70,23 @@ $form->close();
 	
 
 
-echo '<div class="printBtns">
-
-          
-	<form method="post"action="'.site_url('fee_structure/pdf').'">
-          
-	<button type="submit" class="print" id="pdf" ><img src="https://img.icons8.com/material-outlined/24/000000/pdf.png"/>  </button>
-</form>
+echo '<div class="row">
+	
+	
+	<div class="col-md-5"></div>
 	<form method="post"action="'.site_url('fee_structure/generate_report/excel').'">
-	
-	<button type="submit" class="print" id="excel"><img src="https://img.icons8.com/windows/32/000000/file-excel.png"/>  </button>
+
+	<div class="col-md-1"><button type="submit" class="btn" id="btn_download">Download Excel File</button></div>
 	</form>
+	<div class="col-md-5"></div>
 	
-	<button type="submit" class="print" id="print"><img src="https://img.icons8.com/material-outlined/24/000000/print.png"/>  </button>
-	
-	
-	
-</div>';
+</div> </br>';
+
+// <form method="post"action="'.site_url('fee_structure/pdf').'">
+          
+// 	<button type="submit" class="print" id="pdf" ><img src="https://img.icons8.com/material-outlined/24/000000/pdf.png"/>  </button>
+// </form>
+// <button type="submit" class="print" id="print"><img src="https://img.icons8.com/material-outlined/24/000000/print.png"/>  </button>
 $columns = array("Tution Fees"=>"tution_fees", 
 					"Annual Charges"=>"annual_charge",
 					"Medical Fund"=>"medical_fund",
@@ -175,19 +178,13 @@ echo '<tbody>';
 
 <style>
 	
-	  .printBtns
-	  {
-		   display:flex;
-		   gap:3px;
-	  }
-	  .print
+	   #btn_download
 	   {
-        width:32;
-		height:32;
-	  }
+       font-weight: bold;
+	  } 
 
 </style>	
-<script>
+<!-- <script>
 	$(document).ready(function(){
 		$('#print').click(function(){
 			$(this).hide();
@@ -196,4 +193,4 @@ echo '<tbody>';
 		});
 
 	});
-</script>
+</script> -->
