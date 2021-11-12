@@ -87,7 +87,7 @@ echo '<div class="row">
 // 	<button type="submit" class="print" id="pdf" ><img src="https://img.icons8.com/material-outlined/24/000000/pdf.png"/>  </button>
 // </form>
 // <button type="submit" class="print" id="print"><img src="https://img.icons8.com/material-outlined/24/000000/print.png"/>  </button>
-$columns = array("Tution Fees"=>"tution_fees", 
+$numeric = array("Tution Fees"=>"tution_fees", 
 					"Annual Charges"=>"annual_charge",
 					"Medical Fund"=>"medical_fund",
 					"Sports Subscription Fee"=>"sports_subscription_fee",
@@ -99,10 +99,13 @@ $columns = array("Tution Fees"=>"tution_fees",
 					"Library Fee"=>"library_fee",
 					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
 					"Miscellaneous Fee" => "miscellaneous_fee",
+					"Late Fine" => "late_fine",
+					"Pending Amount" => "pending_amount",
+					"Refundable Amount" => "refundable_amount",
 					 
 					);
 
-					$extra_columns = array(
+					$details = array(
 							
 							"Admission No."=>"adm_no",
 							"Name"=>"name",
@@ -115,9 +118,10 @@ $columns = array("Tution Fees"=>"tution_fees",
 							"Category"=>"category",
 							"PWD Status"=>"pwd_status",
 							"Total Fee" => "total_fee"
+							
 							);
 							
-	$columns = array_merge($extra_columns, $columns);
+	$columns = array_merge($details, $numeric);
 
 
 	$row = $ui->row()->open();
@@ -144,7 +148,7 @@ $table = $ui->table()->hover()->bordered()->responsive()
 
 
 echo '<thead>';
-	echo '<tr>';
+	echo '<tr> <th>Action </th>';
 	foreach($columns as $key=>$value)
 	 {   
 		echo '<th>'.$key.'</th>';
@@ -152,14 +156,40 @@ echo '<thead>';
 	echo '</tr>';
 	echo '</thead>';
 echo '<tbody>';
-	foreach($rows as $cur_row)
+	foreach($rows as $key1=>$cur_row)
 	{   
-		echo '<tr>';
+		echo '<tr> <form method="post"action="'.site_url('fee_structure/generate_report/edit').'"><td>';
+		$form = $ui->form()
+		   ->action('fee_structure/generate_report/edit')
+		   ->open();
+		$ui->button()
+		   ->id('save')
+		   ->value('Save')
+		   ->uiType('primary')
+		   ->submit()
+		   ->name('save')
+		   ->show();
+		 echo '</td>';
 		
-		foreach($columns as $key=>$value)
+		foreach($details as $key2=>$value)
 		{
-			echo '<td>'.$cur_row[$value].'</td>';
+			
+			echo '<td> <input type="hidden" name="index" value="'.$key1.'"/>';
+			$ui->input()->value($cur_row[$value])
+					->name($value)->required ()->show();
+			 
+			 echo'</td>';
 		}
+		foreach($numeric as $key2=>$value)
+		{
+			echo '<td>';
+			$ui->input()->value($cur_row[$value])
+					->type('number')->min('0')->max('1000000')->step('0.01')
+					->name($value)->required ()->show();
+			 
+			 echo'</td>';
+		}
+		$form->close();
 			echo '</tr>';
 		
 	}
