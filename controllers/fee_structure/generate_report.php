@@ -112,7 +112,7 @@ class Generate_report extends MY_Controller
     
 	    $rows[$key1]["total_fee"]=$sum-2*$rows[$key1]["refundable_amount"];
         
-
+         $this->report_model->saveAllRows($rows);
          $data['rows']=$rows;
 		$this->load->view('fee_structure/generate_report',$data);
 		$this->drawFooter();
