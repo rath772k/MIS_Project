@@ -46,7 +46,7 @@ class Generate_report extends MY_Controller
 	function index()
 	{
 		$this->drawHeader('Generate Report');
-	    $data['rows']=$this->report_model->getAllRows();
+	    	$data['rows']=array();//$this->report_model->getAllRows();
 		$this->load->view('fee_structure/generate_report',$data);
 		$this->drawFooter();
 	}
