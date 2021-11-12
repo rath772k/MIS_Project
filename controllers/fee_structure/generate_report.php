@@ -9,35 +9,17 @@ class Generate_report extends MY_Controller
 	function __construct()
 	{  
 		parent::__construct(array('emp','stu'));
-		$this->columns = array(
-			"Admission No."=>"adm_no",
-							"Name"=>"name",
-							"Email"=>"email",
-						 	"Session Year"=>"session_year",
-							"Session"=>"session",
-							"Course"=>"course",
-							"Branch"=>"branch",
-							"Semester"=>"semester",
-							"Category"=>"category",
-							"PWD Status"=>"pwd_status",
-							"Date of Registration"=>"date_of_registration",
-			"Tution Fees"=>"tution_fees", 
-					"Annual Charges"=>"annual_charge",
-					"Medical Fund"=>"medical_fund",
-					"Sports Subscription Fee"=>"sports_subscription_fee",
-					"Hostel Rent"=>"house_rent",
-					"Semester Registration Fee"=>"semester_registration_fee",
-					"Examination Fee"=>"examination_fee",
-					"Computer and Internet Charges"=>"computer_and_internet_charges",
-					"Electricity Charges"=>"electricity_charges",
-					"Library Fee"=>"library_fee",
-					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
-					"Miscellaneous Fee" => "miscellaneous_fee",
-					"Late Fine" => "late_fine",
-					"Pending Amount" => "pending_amount",
-					"Refundable Amount" => "refundable_amount",
-					"Total Fee" => "total_fee"
-						   );
+		$this->columns = array("adm_no","name","email",
+				"session_year","session","course","branch","semester","category","pwd_status",
+				"date_of_registration","total_fee"
+			      );
+		$this->numeric = array(
+				"tution_fees","annual_charge","medical_fund",
+				"sports_subscription_fee","house_rent",
+				"semester_registration_fee","examination_fee",
+				"computer_and_internet_charges","electricity_charges",
+				"library_fee","training_and_placement_support_fee","miscellaneous_fee","late_fine","pending_amount","refundable_amount");
+		
 		$this->load->model("fee_structure/report_model","report_model");
 	
 	   	
@@ -91,7 +73,13 @@ class Generate_report extends MY_Controller
 		foreach($this->columns as $key=>$value)
 		{
 			$curr_row[$value]=$row[$value];
-			echo $row[$value];
+			
+
+		}
+		foreach($this->numeric as $key=>$value)
+		{
+			$curr_row[$value]=$row[$value];
+			
 		}
 		
 		 fputcsv($output, $curr_row);
@@ -103,6 +91,33 @@ class Generate_report extends MY_Controller
 	
 	}
 	
+	function edit()
+	{ $this->drawHeader('Generate Report');
+		$rows=$_SESSION["exported_rows"];
+		$data['session']=$_SESSION["session"];
+		$data['session_year']=$_SESSION["session_year"];
+		$key1=(int)$this->input->post("index");
+		
+		$sum=0;
+	foreach($this->columns as $key2=>$value)
+	  {	
+		$rows[$key1][$value]=$this->input->post($value);
+		 
+	  }
+	  foreach($this->numeric as $key2=>$value)
+	  {	
+		$rows[$key1][$value]=$this->input->post($value);
+		 $sum+=$rows[$key1][$value] ;
+	  }
+    
+	    $rows[$key1]["total_fee"]=$sum-2*$rows[$key1]["refundable_amount"];
+        
+
+         $data['rows']=$rows;
+		$this->load->view('fee_structure/generate_report',$data);
+		$this->drawFooter();
+
+	}
 
 	
 }
