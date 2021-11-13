@@ -9,6 +9,7 @@ class Add_fee_structure extends MY_Controller
 		parent::__construct(array('emp','stu'));
 		$this->columns = array(
 				"session_year","session","course","semester","category",
+				"payment_start_date", "payment_end_date",
 				"tution_fees","annual_charge","medical_fund",
 				"sports_subscription_fee","house_rent",
 				"semester_registration_fee","examination_fee",
