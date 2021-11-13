@@ -1,5 +1,3 @@
-
-
 <?php
 // session_start();
 $_SESSION["session"] = $session;
@@ -9,7 +7,43 @@ $_SESSION["exported_rows"] = $rows;
 header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
 header("Pragma: no-cache"); // HTTP 1.0.
 header("Expires: 0");
+
 $ui = new UI();
+$numeric = array("Tution Fees"=>"tution_fees", 
+					"Annual Charges"=>"annual_charge",
+					"Medical Fund"=>"medical_fund",
+					"Sports Subscription Fee"=>"sports_subscription_fee",
+					"Hostel Rent"=>"house_rent",
+					"Semester Registration Fee"=>"semester_registration_fee",
+					"Examination Fee"=>"examination_fee",
+					"Computer and Internet Charges"=>"computer_and_internet_charges",
+					"Electricity Charges"=>"electricity_charges",
+					"Library Fee"=>"library_fee",
+					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
+					"Miscellaneous Fee" => "miscellaneous_fee",
+					"Late Fine" => "late_fine",
+					"Pending Amount" => "pending_amount",
+					"Refundable Amount" => "refundable_amount",
+					 
+					);
+
+					$details = array(
+							
+							"Admission No."=>"adm_no",
+							"Name"=>"name",
+							"Email"=>"email",
+						 	"Session Year"=>"session_year",
+							"Session"=>"session",
+							"Course"=>"course",
+							"Branch"=>"branch",
+							"Semester"=>"semester",
+							"Category"=>"category",
+							"PWD Status"=>"pwd_status",
+							"Total Fee" => "total_fee"
+							
+							);
+
+$columns = array_merge($details, $numeric);
 
 $form = $ui->form()
 ->multipart()
@@ -70,58 +104,13 @@ $form->close();
 	
 
 
-echo '<div class="row">
+echo '<div  style="display:flex; justify-content:center;">
 	
-	
-	<div class="col-md-5"></div>
 	<form method="post"action="'.site_url('fee_structure/generate_report/excel').'">
-
 	<div class="col-md-1"><button type="submit" class="btn" id="btn_download">Download Excel File</button></div>
 	</form>
-	<div class="col-md-5"></div>
-	
-</div> </br>';
-
-// <form method="post"action="'.site_url('fee_structure/pdf').'">
-          
-// 	<button type="submit" class="print" id="pdf" ><img src="https://img.icons8.com/material-outlined/24/000000/pdf.png"/>  </button>
-// </form>
-// <button type="submit" class="print" id="print"><img src="https://img.icons8.com/material-outlined/24/000000/print.png"/>  </button>
-$numeric = array("Tution Fees"=>"tution_fees", 
-					"Annual Charges"=>"annual_charge",
-					"Medical Fund"=>"medical_fund",
-					"Sports Subscription Fee"=>"sports_subscription_fee",
-					"Hostel Rent"=>"house_rent",
-					"Semester Registration Fee"=>"semester_registration_fee",
-					"Examination Fee"=>"examination_fee",
-					"Computer and Internet Charges"=>"computer_and_internet_charges",
-					"Electricity Charges"=>"electricity_charges",
-					"Library Fee"=>"library_fee",
-					"Training and Placement Support Fee"=>"training_and_placement_support_fee",
-					"Miscellaneous Fee" => "miscellaneous_fee",
-					"Late Fine" => "late_fine",
-					"Pending Amount" => "pending_amount",
-					"Refundable Amount" => "refundable_amount",
-					 
-					);
-
-					$details = array(
-							
-							"Admission No."=>"adm_no",
-							"Name"=>"name",
-							"Email"=>"email",
-						 	"Session Year"=>"session_year",
-							"Session"=>"session",
-							"Course"=>"course",
-							"Branch"=>"branch",
-							"Semester"=>"semester",
-							"Category"=>"category",
-							"PWD Status"=>"pwd_status",
-							"Total Fee" => "total_fee"
-							
-							);
-							
-	$columns = array_merge($details, $numeric);
+		
+</div>';
 
 
 	$row = $ui->row()->open();
@@ -134,13 +123,24 @@ $numeric = array("Tution Fees"=>"tution_fees",
 	$col2 = $ui->col()
 				 ->width(12)
 	             ->open();
-
+    $form = $ui->form()
+		   ->action('fee_structure/generate_report/save')
+		   ->open();
+		   echo '<div style="display:flex; justify-content:center;">';
+		$ui->button()
+		   ->id('save')
+		   ->value('Save')
+		   ->uiType('primary')
+		   ->submit()
+		   ->name('save')
+		   ->show();
+		   echo '</div></br>';
 	$box = $ui->box()
 			 //->uiType('primary')
 			 //->title('EDC Room Allotment Form')
 			 //->solid()
 			 ->open();
-
+   
 $table = $ui->table()->hover()->bordered()->responsive()
 							->sortable()->searchable()->paginated()
 						    ->open();
@@ -148,7 +148,7 @@ $table = $ui->table()->hover()->bordered()->responsive()
 
 
 echo '<thead>';
-	echo '<tr> <th>Action </th>';
+	echo '<tr>';
 	foreach($columns as $key=>$value)
 	 {   
 		echo '<th>'.$key.'</th>';
@@ -158,26 +158,18 @@ echo '<thead>';
 echo '<tbody>';
 	foreach($rows as $key1=>$cur_row)
 	{   
-		echo '<tr> <form method="post"action="'.site_url('fee_structure/generate_report/edit').'"><td>';
-		$form = $ui->form()
-		   ->action('fee_structure/generate_report/edit')
-		   ->open();
-		$ui->button()
-		   ->id('save')
-		   ->value('Save')
-		   ->uiType('primary')
-		   ->submit()
-		   ->name('save')
-		   ->show();
-		 echo '</td>';
+		echo '<tr>';
+		
+		
 		
 		foreach($details as $key2=>$value)
 		{
 			
-			echo '<td> <input type="hidden" name="index" value="'.$key1.'"/>';
+			echo '<td>';
+			
 			$ui->input()->value($cur_row[$value])
-					->name($value)->required ()->show();
-			 
+					->name($key1."_".$value)->required()->disabled()->show();
+		
 			 echo'</td>';
 		}
 		foreach($numeric as $key2=>$value)
@@ -185,17 +177,18 @@ echo '<tbody>';
 			echo '<td>';
 			$ui->input()->value($cur_row[$value])
 					->type('number')->min('0')->max('1000000')->step('0.01')
-					->name($value)->required ()->show();
+					->name($key1."_".$value)->required ()->show();
 			 
 			 echo'</td>';
 		}
-		$form->close();
+		
 			echo '</tr>';
 		
 	}
 	echo '</tbody>';
 			$table->close();
 			$box->close();
+			$form->close();
 			$col2->close();
 			$row->close();
 			
@@ -221,6 +214,5 @@ echo '<tbody>';
 			window.print();
 			$(this).show();
 		});
-
 	});
 </script> -->
