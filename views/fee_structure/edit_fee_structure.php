@@ -103,6 +103,8 @@
 		
 		echo '<tr>';
 		echo '<th>Category</th>';
+		echo '<th>Payment Start Date</th>';
+		echo '<th>Payment End Date</th>';
 		foreach($columns as $key=>$value)
 		{
 			echo '<th>'.$key.'</th>';
@@ -126,6 +128,27 @@
 		->required()
 		->show();
 		echo '</th>';
+
+		echo '<td>';
+		$ui->datePicker()
+		->name('payment_start_date')
+		->width(100)
+		->value($edit_row['payment_start_date'])
+		->dateFormat('yyyy-mm-dd')
+		->required()
+		->show();
+		echo '</td>';
+
+		echo '<td>';
+		$ui->datePicker()
+		->name('payment_end_date')
+		->width(100)
+		->value($edit_row['payment_end_date'])
+		->dateFormat('yyyy-mm-dd')
+		->required()
+		->show();
+		echo '</td>';
+
 		foreach($columns as $key => $value)
 		{
 			echo '<td>';
