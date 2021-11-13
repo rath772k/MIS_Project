@@ -11,7 +11,7 @@ class Generate_report extends MY_Controller
 		parent::__construct(array('emp','stu'));
 		$this->columns = array("adm_no","name","email",
 				"session_year","session","course","branch","semester","category","pwd_status",
-				"date_of_registration","total_fee"
+				"date_of_registration","payment_start_date", "payment_end_date", "total_fee"
 			      );
 		$this->numeric = array(
 				"tution_fees","annual_charge","medical_fund",
@@ -65,7 +65,9 @@ class Generate_report extends MY_Controller
 
      $header=array();
 	foreach($this->columns as $key=>$value)
-		$header[]=$key;
+		$header[]=$value;
+	foreach($this->numeric as $key=>$value)
+		$header[]=$value;
 		
 	$output = fopen("php://output", "w");
      fputcsv($output, $header);
