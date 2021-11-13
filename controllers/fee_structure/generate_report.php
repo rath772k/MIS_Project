@@ -96,8 +96,8 @@ class Generate_report extends MY_Controller
 	function save()
 	{ $this->drawHeader('Generate Report');
 		$rows=$_SESSION["exported_rows"];
-		$session_year =  $_SESSION["session"];
-		$session =  $_SESSION["session_year"];
+		$session_year =  $_SESSION["session_year"];
+		$session =  $_SESSION["session"];
 			$data['session']=$session;
 		$data['session_year']=$session_year;
 		foreach($rows as $key=>$value1)
@@ -119,7 +119,7 @@ class Generate_report extends MY_Controller
 	   
         
          $this->report_model->saveAllRows($rows);
-         $data['rows']=$this->report_model->getRequiredRows($session_year, $session);
+         $data['rows']=$rows;
 		$this->load->view('fee_structure/generate_report',$data);
 		$this->drawFooter();
 
