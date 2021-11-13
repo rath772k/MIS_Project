@@ -37,6 +37,7 @@ $numeric = array("Tution Fees"=>"tution_fees",
 							"Course"=>"course",
 							"Branch"=>"branch",
 							"Semester"=>"semester",
+							"Date of Registration"=>"date_of_registration",
 							"Category"=>"category",
 							"PWD Status"=>"pwd_status",
 							"Total Fee" => "total_fee"
@@ -169,7 +170,7 @@ echo '<tbody>';
 			
 			$ui->input()->value($cur_row[$value])
 					->name($key1."_".$value)->required()->show();
-		
+				//echo $cur_row[$value];
 			 echo'</td>';
 		}
 		foreach($numeric as $key2=>$value)
