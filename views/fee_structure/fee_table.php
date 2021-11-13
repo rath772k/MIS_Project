@@ -38,7 +38,9 @@
 							"Session"=>"session",
 							"Course"=>"course",
 							"Semester"=>"semester",
-							"Category"=>"category");
+							"Category"=>"category",
+							"Payment Start Date"=>"payment_start_date",
+							"Payment End Date"=>"payment_end_date");
 	$columns = array_merge($extra_columns, $columns);
 	
 	echo '<thead>';
