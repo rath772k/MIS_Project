@@ -38,6 +38,8 @@ $numeric = array("Tution Fees"=>"tution_fees",
 							"Branch"=>"branch",
 							"Semester"=>"semester",
 							"Date of Registration"=>"date_of_registration",
+							"Payment Start Date"=>"payment_start_date",
+							"Payment End Date"=>"payment_end_date",
 							"Category"=>"category",
 							"PWD Status"=>"pwd_status",
 							"Total Fee" => "total_fee"
@@ -168,8 +170,8 @@ echo '<tbody>';
 			
 			echo '<td>';
 			
-			$ui->input()->value($cur_row[$value])
-					->name($key1."_".$value)->required()->show();
+			$ui->input()->type('text')->value($cur_row[$value])
+					->name($key1."_".$value)->required()->disabled()->show();
 				//echo $cur_row[$value];
 			 echo'</td>';
 		}
