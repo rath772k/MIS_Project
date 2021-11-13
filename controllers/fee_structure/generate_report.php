@@ -29,6 +29,8 @@ class Generate_report extends MY_Controller
 	{
 		$this->drawHeader('Generate Report');
 	    	$data['rows']=array();//$this->report_model->getAllRows();
+			$data['session']="";
+		$data['session_year']="";
 		$this->load->view('fee_structure/generate_report',$data);
 		$this->drawFooter();
 	}
@@ -70,13 +72,13 @@ class Generate_report extends MY_Controller
 
 	foreach($rows as $row) {
          $curr_row=array();
-		foreach($this->columns as $key=>$value)
+		foreach($this->columns as $value)
 		{
 			$curr_row[$value]=$row[$value];
 			
 
 		}
-		foreach($this->numeric as $key=>$value)
+		foreach($this->numeric as $value)
 		{
 			$curr_row[$value]=$row[$value];
 			
@@ -91,29 +93,33 @@ class Generate_report extends MY_Controller
 	
 	}
 	
-	function edit()
+	function save()
 	{ $this->drawHeader('Generate Report');
 		$rows=$_SESSION["exported_rows"];
-		$data['session']=$_SESSION["session"];
-		$data['session_year']=$_SESSION["session_year"];
-		$key1=(int)$this->input->post("index");
-		
-		$sum=0;
-	foreach($this->columns as $key2=>$value)
-	  {	
-		$rows[$key1][$value]=$this->input->post($value);
+		$session_year =  $_SESSION["session"];
+		$session =  $_SESSION["session_year"];
+			$data['session']=$session;
+		$data['session_year']=$session_year;
+		foreach($rows as $key=>$value1)
+		{
+         $sum=0;
+	foreach($this->columns as $value)
+	  {	  
+		 $rows[$key][$value]=$this->input->post($key."_".$value);
 		 
 	  }
 	  foreach($this->numeric as $key2=>$value)
 	  {	
-		$rows[$key1][$value]=$this->input->post($value);
-		 $sum+=$rows[$key1][$value] ;
+		$rows[$key][$value]=$this->input->post($key."_".$value);
+		 $sum+=$rows[$key][$value] ;
 	  }
-    
-	    $rows[$key1]["total_fee"]=$sum-2*$rows[$key1]["refundable_amount"];
+	   $rows[$key]["total_fee"]=$sum-2*$rows[$key]["refundable_amount"];
+	}
+
+	   
         
          $this->report_model->saveAllRows($rows);
-         $data['rows']=$rows;
+         $data['rows']=$this->report_model->getRequiredRows($session_year, $session);
 		$this->load->view('fee_structure/generate_report',$data);
 		$this->drawFooter();
 
