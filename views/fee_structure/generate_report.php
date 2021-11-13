@@ -168,7 +168,7 @@ echo '<tbody>';
 			echo '<td>';
 			
 			$ui->input()->value($cur_row[$value])
-					->name($key1."_".$value)->required()->disabled()->show();
+					->name($key1."_".$value)->required()->show();
 		
 			 echo'</td>';
 		}
