@@ -128,6 +128,8 @@
 		echo '<thead>';
 		echo '<tr>';
 		echo '<th>Category</th>';
+		echo '<th>Payment Start Date</th>';
+		echo '<th>Payment End Date</th>';
 		foreach($columns as $key=>$value)
 		{
 			echo '<th>'.$key.'</th>';
@@ -145,7 +147,6 @@
 		echo '<tr>';
 		echo '<th>';
 		$ui->select()
-		->width(3)
 		->name('category')
 		->width(100)
 		->required()
@@ -153,6 +154,29 @@
 		->required()
 		->show();
 		echo '</th>';
+
+		echo '<td>';
+		$ui->datePicker()
+		->name('payment_start_date')
+		->placeholder('yyyy-mm-dd')
+		->width(100)
+		->required()
+		->dateFormat('yyyy-mm-dd')
+		->required()
+		->show();
+		echo '</td>';
+
+		echo '<td>';
+		$ui->datePicker()
+		->name('payment_end_date')
+		->placeholder('yyyy-mm-dd')
+		->width(100)
+		->required()
+		->dateFormat('yyyy-mm-dd')
+		->required()
+		->show();
+		echo '</td>';
+
 		foreach($columns as $key => $value)
 		{
 			echo '<td>';
